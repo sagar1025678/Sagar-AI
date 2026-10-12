@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sagar AI 💜</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+ --bg:#090912;
+ --panel:#11111e;
+ --purple:#8b6cff;
+ --pink:#ff80bf;
+ --text:#f8f6ff;
+ --muted:#a5a0bd;
+}
+
+body{
+ margin:0;
+ min-height:100vh;
+ padding:12px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ background:
+ radial-gradient(ellipse at 15% 10%,#38205b66,transparent 45%),
+ radial-gradient(ellipse at 90% 90%,#5c214b44,transparent 40%),
+ var(--bg);
+ color:var(--text);
+ font-family:Arial,sans-serif;
+}
+
+.app{
+ width:100%;
+ max-width:780px;
+ height:94vh;
+ max-height:900px;
+ display:flex;
+ flex-direction:column;
+ overflow:hidden;
+ border:1px solid #38304f;
+ border-radius:24px;
+ background:#10101bea;
+ box-shadow:0 20px 90px #0008;
+}
+
+header{
+ padding:19px;
+ display:flex;
+ align-items:center;
+ gap:13px;
+ border-bottom:1px solid #29253a;
+ background:#141321;
+}
+
+.logo{
+ width:47px;
+ height:47px;
+ border-radius:16px;
+ display:grid;
+ place-items:center;
+ font-size:25px;
+ background:linear-gradient(135deg,#bc83ff,#6954ec,#ff80bf);
+ box-shadow:0 0 25px #8963ff55;
+}
+
+.brand{flex:1}
+.brand h2{margin:0 0 6px;font-size:20px}
+.status{font-size:12px;color:#a8a2bf}
+.status span{color:#65e8a5}
+
+.tag{
+ color:#e5d9ff;
+ border:1px solid #51416c;
+ border-radius:20px;
+ padding:7px 10px;
+ font-size:11px;
+}
+
+#chat{
+ flex:1;
+ overflow-y:auto;
+ padding:22px;
+ display:flex;
+ flex-direction:column;
+ gap:15px;
+ scroll-behavior:smooth;
+}
+
+.welcome{
+ margin:auto;
+ text-align:center;
+ padding:20px 5px;
+ max-width:520px;
+}
+
+.big-star{
+ font-size:65px;
+ color:#c6aaff;
+ text-shadow:0 0 35px #a778ff99;
+ animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+ 0%,100%{transform:translateY(0)}
+ 50%{transform:translateY(-10px)}
+}
+
+.welcome h1{
+ font-size:clamp(27px,5vw,39px);
+ margin:12px 0;
+ background:linear-gradient(90deg,#fff,#d7bdff,#ffadd5);
+ color:transparent;
+ background-clip:text;
+}
+
+.welcome p{
+ color:var(--muted);
+ line-height:1.7;
+ font-size:14px;
+}
+
+.chips{
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:center;
+ gap:9px;
+ margin-top:24px;
+}
+
+.chips button{
+ background:#211c33;
+ border:1px solid #43365f;
+ color:#e4d7ff;
+ border-radius:14px;
+ padding:11px 13px;
+ cursor:pointer;
+ transition:.2s;
+}
+
+.chips button:hover{
+ background:#382953;
+ transform:translateY(-2px);
+}
+
+.msg{
+ max-width:88%;
+ padding:14px 16px;
+ border-radius:18px;
+ font-size:14px;
+ line-height:1.75;
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
+ animation:appear .25s ease;
+}
+
+@keyframes appear{
+ from{opacity:0;transform:translateY(7px)}
+ to{opacity:1;transform:translateY(0)}
+}
+
+.bot{
+ align-self:flex-start;
+ background:#222034;
+ border:1px solid #302b48;
+ border-bottom-left-radius:5px;
+}
+
+.user{
+ align-self:flex-end;
+ background:linear-gradient(135deg,#7959df,#a15bc4);
+ border-bottom-right-radius:5px;
+}
+
+.sender{
+ font-size:10px;
+ color:#c4b3ed;
+ margin-bottom:5px;
+ font-weight:bold;
+ letter-spacing:1px;
+}
+
+.typing{
+ color:#c5a9ff;
+ font-size:13px;
+ padding:5px 10px;
+}
+
+form{
+ display:flex;
+ gap:10px;
+ padding:15px;
+ border-top:1px solid #29253a;
+ background:#141321;
+}
+
+input{
+ flex:1;
+ min-width:0;
+ border:1px solid #3a3450;
+ border-radius:15px;
+ background:#211e30;
+ color:white;
+ padding:15px;
+ font-size:15px;
+ outline:none;
+}
+
+input:focus{border-color:#a386ff}
+input::placeholder{color:#88819f}
+
+.send{
+ border:0;
+ border-radius:15px;
+ padding:0 19px;
+ background:linear-gradient(135deg,#9270ff,#d16cbb);
+ color:white;
+ font-size:14px;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+.send:hover{filter:brightness(1.13)}
+.send:disabled{opacity:.5;cursor:default}
+
+.bottom{
+ text-align:center;
+ font-size:10px;
+ color:#77718d;
+ padding:0 10px 13px;
+ background:#141321;
+}
+
+@media(max-width:500px){
+ body{padding:0}
+ .app{height:100dvh;max-height:none;border-radius:0;border:0}
+ header{padding:14px}
+ #chat{padding:15px}
+ .tag{display:none}
+ .msg{max-width:94%}
+ form{padding:11px}
+ input{padding:13px}
+ .send{padding:0 15px}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+ <div class="logo">✦</div>
+ <div class="brand">
+  <h2>Sagar AI</h2>
+  <div class="status"><span>●</span> Online · Your personal assistant</div>
+ </div>
+ <div class="tag">Made with ❤️ by Sagar</div>
+</header>
+
+<div id="chat">
+
+ <div class="welcome" id="welcome">
+  <div class="big-star">✧</div>
+  <h1>Hey there, beautiful soul.</h1>
+  <p>
+   Welcome to Sagar AI ✨<br>
+   A little corner of the internet made by Sagar.<br>
+   Ask me anything, or say hello!
+  </p>
+
+  <div class="chips">
+   <button onclick="quick('Heyyy!')">👋 Say hello</button>
+   <button onclick="quick('Who is Sagar?')">👀 Who is Sagar?</button>
+   <button onclick="quick('Does Sagar love me?')">💗 Love question</button>
+   <button onclick="quick('Flirt with me')">😏 Flirt with me</button>
+   <button onclick="quick('Tell me a joke')">😂 Make me laugh</button>
+   <button onclick="quick('Write me a love letter')">💌 Love letter</button>
+  </div>
+ </div>
+
+</div>
+
+<form id="form">
+ <input
+  id="input"
+  placeholder="Message Sagar AI..."
+  autocomplete="off"
+  required
+ >
+ <button class="send" id="send" type="submit">Send ➤</button>
+</form>
+
+<div class="bottom">
+ A little website, a lot of heart · Sagar AI 💜
+</div>
+
+</div>
+
+<script>
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+const form = document.getElementById("form");
+const send = document.getElementById("send");
+
+function addMessage(text,type){
+ const box = document.createElement("div");
+ box.className = "msg " + type;
+
+ const label = document.createElement("div");
+ label.className = "sender";
+ label.textContent = type === "user" ? "YOU" : "SAGAR AI";
+
+ const content = document.createElement("div");
+ content.textContent = text;
+
+ box.appendChild(label);
+ box.appendChild(content);
+ chat.appendChild(box);
+ chat.scrollTop = chat.scrollHeight;
+}
+
+function quick(text){
+ input.value = text;
+ form.requestSubmit();
+}
+
+function reply(message){
+ const m = message.toLowerCase().trim();
+
+ // 💗 BINITA: THE SPECIAL GIRL
+ if(
+  /\bbinita\b/.test(m) ||
+  m.includes("sagar's girlfriend") ||
+  m.includes("sagar girlfriend") ||
+  m.includes("his girlfriend") ||
+  m.includes("who am i to sagar")
+ ){
+  return "WAITTTTT 😭💗\n\nIS THAT BINITA?! THE GIRL THIS WHOLE WEBSITE IS HELPING CELEBRATE?! 👑💕\n\nGirl, welcome!! Sagar made this little corner of the internet and wanted it to know your name. That is honestly so cute. 🥹\n\nBetween us, I suspect you're one of his favorite people to talk to. 🤭❤️\n\nNow come on, Binita... tell me, are you here to ask about your boy or to make me help you tease him? 😂💋";
+ }
+
+ // 💞 HOW MUCH SAGAR LOVES HER
+ if(
+  (m.includes("how much") && m.includes("love")) ||
+  m.includes("does sagar love me") ||
+  m.includes("sagar loves me") ||
+  m.includes("love me") ||
+  m.includes("sagar love binita")
+ ){
+  return "Binita, girl, come sit down for a second. 🥹💗\n\nDo you know what is cute about this project? Sagar didn't just want a normal chatbot. He wanted a place where your name could pop up and where the words about you could make you smile. ❤️\n\nHe wanted to make something personal for you, and that tells you something about the effort he wanted to put into this little surprise.\n\nBut remember, the sweetest love isn't just a website or a romantic paragraph. It's kindness, honesty, respect, and showing up for each other in real life too. 🫶💕\n\nP.S. SAGAR!! If Binita is reading this, go give your girl some attention. Stop making me do all the flirting! 😭😂💋";
+ }
+
+ // 😏 FLIRT MODE
+ if(
+  m.includes("flirt") ||
+  m.includes("make me blush") ||
+  m.includes("romantic") ||
+  m.includes("pick up line")
+ ){
+  return "BINITA, ARE YOU READY? 😏💋\n\nAre you the notification Sagar waits for? Because suddenly, every other notification looks boring. 📱💕\n\nAre you a software update? Because apparently you make everything in his world better. 😂❤️\n\nOkay, okay, enough from me. I'm literally an AI and even I'M blushing. 🤖😭💗";
+ }
+
+ // 👑 WHO IS SAGAR?
+ if(
+  m.includes("who is sagar") ||
+  m.includes("tell me about sagar") ||
+  m.includes("describe sagar") ||
+  m.includes("sagar personality")
+ ){
+  return "OHHH 👀 YOU WANT THE SAGAR FILE?!\n\n📂 CONFIDENTIAL: SAGAR EDITION\n\n❤️ Name: Sagar\n💻 Current mission: Making cool things on GitHub\n💗 Romantic side: Wanted to make a chatbot that knows about Binita\n😂 Possible weakness: Getting teased by his own chatbot\n✨ Special project: This little website, made with you in mind\n\nAnd the most important detail? Sagar specifically asked me to say sweet things about how much he loves you. Bro really said, 'Make sure the AI recognizes Binita!' 😭😂💕\n\nSagar, your secret is not safe with me. 🤭";
+ }
+
+ // 💌 LOVE LETTER
+ if(
+  m.includes("love letter") ||
+  m.includes("write a letter") ||
+  m.includes("message for binita") ||
+  m.includes("say something sweet") ||
+  m.includes("sweet message")
+ ){
+  return "💌 A LITTLE MESSAGE FOR BINITA\n\nDear Binita, ❤️\n\nSome people send flowers, some write songs, and apparently Sagar decided to build a whole chatbot. 😂💗\n\nBut behind this little website is a simple idea: he wanted to make something that would make you smile when you opened it.\n\nYou deserve to feel appreciated not only on special days, but on ordinary afternoons, sleepy evenings, and those moments when you need a little reminder that you matter.\n\nMay your days together be full of silly jokes, honest conversations, little surprises, and memories that make you both smile years later. 🥹💕\n\nWith a little teasing and lots of pink hearts,\nYour personal Sagar AI 💗🤖";
+ }
+
+ // 😂 JOKES
+ if(m.includes("joke") || m.includes("make me laugh")){
+  return "😂 BREAKING NEWS!\n\nLocal boy named Sagar reportedly created an entire website just to impress one girl.\n\nScientists are calling it a severe case of being down bad. 😭💗\n\nSuspect was last seen editing HTML and smiling at his laptop. 💻😂";
+ }
+
+ // 🇯🇵 JAPAN
+ if(m.includes("japan")){
+  return "Japan 🇯🇵✨\n\nBeautiful mountains, snowy villages, late-night convenience stores, anime, trains, and endless places to explore.\n\nBut honestly, the best memories often aren't about where you go. They're about who you share them with. 💗";
+ }
+
+ // ⚡ MOTIVATION
+ if(m.includes("motivation")){
+  return "HEY YOU! 💜\n\nYou don't need to have everything figured out today.\n\nTake small steps, learn as you go, and give yourself credit for trying. You deserve to chase your dreams and feel proud of the person you're becoming. ✨\n\nOne day at a time. You've got this! 🫶";
+ }
+
+ // 🥺 SAD OR UPSET
+ if(
+  m.includes("sad") ||
+  m.includes("cry") ||
+  m.includes("upset") ||
+  m.includes("lonely")
+ ){
+  return "Hey, come here for a second. 🫂💗\n\nYou don't have to pretend you're okay every moment. Take a breath, have some water, and give yourself a little time.\n\nIf something happened, you can tell me about it. I can listen and help you think through it. You don't have to find all the answers at once. 💕";
+ }
+
+ // ❤️ WHAT IS LOVE?
+ if(m.includes("what is love")){
+  return "Love is more than butterflies and cute messages. ❤️\n\nIt's caring about someone's feelings, listening even when it's difficult, laughing at ridiculous jokes, respecting each other's boundaries, and choosing kindness even on ordinary days. 🫶\n\nAnd sometimes, apparently, it's also building an HTML website. 😂💗";
+ }
+
+ // 👋 GREETINGS
+ if(/\b(hi|hello|hey|hii|heyy|namaste|hola)\b/.test(m)){
+  return "HEYYYY!! 👋💗\n\nWelcome to Sagar AI! ✨\n\nWait... before we continue, I have an important question. 👀\n\nAre you Binita, the girl Sagar specifically told me to recognize? 🤭💕\n\nEither way, you're welcome here. What's on your mind?";
+ }
+
+ // 😂 THANK YOU
+ if(m.includes("thank")){
+  return "AWWW, YOU'RE WELCOME! 🥹💗\n\nMaking you smile is part of my job description now. Sagar didn't officially write that, but I'm adding it anyway. 😂💕";
+ }
+
+ // 👋 GOODBYE
+ if(m.includes("bye") || m.includes("goodnight")){
+  return "BYEEEE! 🥹💗\n\nTake care of yourself, keep smiling, and don't forget to make some lovely memories today. ✨\n\nAnd Binita? Tell Sagar his AI says hello. 😂💋";
+ }
+
+ // 🤖 DEFAULT
+ return "Hehe, you've got me thinking! 🤖💗\n\nI'm Sagar AI, a little chatbot made by Sagar. I'm still learning through the responses built into my code.\n\nTry asking me:\n\n💕 Does Sagar love me?\n😏 Flirt with me\n👀 Who is Sagar?\n💌 Write me a love letter\n😂 Tell me a joke\n✨ Tell me something sweet";
+}
+
+form.addEventListener("submit",function(e){
+ e.preventDefault();
+
+ const message = input.value.trim();
+ if(!message) return;
+
+ document.getElementById("welcome")?.remove();
+
+ addMessage(message,"user");
+ input.value = "";
+ send.disabled = true;
+ input.focus();
+
+ const typing = document.createElement("div");
+ typing.className = "typing";
+ typing.textContent = "Sagar AI is thinking... ✨";
+ chat.appendChild(typing);
+ chat.scrollTop = chat.scrollHeight;
+
+ setTimeout(function(){
+  typing.remove();
+  addMessage(reply(message),"bot");
+  send.disabled = false;
+  input.focus();
+ },500);
+});
+</script>
+</body>
+</html>
